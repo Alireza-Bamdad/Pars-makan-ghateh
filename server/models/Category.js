@@ -10,7 +10,6 @@ const categorySchema = new mongoose.Schema({
   slug: {
     type: String,
     unique: true,
-    lowercase: true,
     trim: true
   },
   description: {
@@ -30,12 +29,10 @@ const categorySchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  // آمار دسته‌بندی
   productsCount: {
     type: Number,
     default: 0
   },
-  // SEO fields
   metaTitle: {
     type: String,
     maxlength: [60, 'عنوان متا نباید بیشتر از ۶۰ کاراکتر باشد']
@@ -52,11 +49,11 @@ const categorySchema = new mongoose.Schema({
 function createPersianSlug(text) {
   let slug = text
     .trim()
-    .replace(/\s+/g, '-')      // Replace spaces with hyphens
-    .replace(/[^\u0600-\u06FF\w\s-]/g, '') // Keep only Persian chars, letters, numbers, hyphens
-    .replace(/-+/g, '-')       // Replace multiple hyphens with single
-    .replace(/^-|-$/g, '');    // Remove leading/trailing hyphens
-  
+    .replace(/\s+/g, '-')                      // فضاها را با خط تیره جایگزین کن
+    .replace(/[^\u0600-\u06FF\w\s-]/g, '')     // فقط حروف فارسی، انگلیسی، اعداد و خط تیره نگه دار
+    .replace(/-+/g, '-')                       // چندین خط تیره را به یکی تبدیل کن
+    .replace(/^-|-$/g, '');                    // خط تیره از ابتدا و انتها حذف کن
+    
   return slug || 'دسته-بندی-' + Date.now();
 }
 
@@ -83,7 +80,7 @@ categorySchema.methods.updateProductsCount = async function() {
   try {
     const Product = require('./Product');
     this.productsCount = await Product.countDocuments({ 
-      category: this._id, 
+      category: this._id,
       isActive: true 
     });
     return this.save();

@@ -17,61 +17,71 @@ const Header = () => {
     { name: 'تماس با ما', icon: Phone, path: '/contact' },
   ];
 
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div className="font-vazir" dir="rtl">
       <style jsx>{`
         @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
-        
         .font-vazir {
           font-family: Vazir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
       `}</style>
 
-      {/* Desktop Header - Fixed Top */}
-      <header className="fixed top-0 left-0 right-0 bg-white shadow-md border-b-2 border-gray-100 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18">
+      {/* Desktop Header */}
+      <header className=" fixed font-bold top-0 left-0 right-0 bg-white shadow-md border-b-2 border-gray-100 z-50 ">
+        <div className=''>
+            <a
+              href="tel: 09173271310"
+              className="flex  font-semibold text-gray-300 fint-xs py-1 px-12 bg-gray-800 "
+            >
+            <h3 className='mx-2'>تلفن مرکز فروش</h3>
+
+              <h3>
+                09173271310
+              </h3>
+            </a>
+
+        </div>
+
+        <div className=" mx-auto px-8  ">
+          <div className="flex justify-between items-center h-18  with-full">
             {/* لوگو */}
-            <Link to="/" className="flex-shrink-0 flex items-center hover:opacity-80 transition-opacity">
-              <div className="bg-blue-600 text-white w-14 h-12 rounded-xl flex items-center justify-center font-black text-lg shadow-lg">
-                PMG
-              </div>
-              <span className="mr-4 text-2xl font-black text-gray-900 tracking-tight">
-                پارس ماکان قطعه
-              </span>
+            <Link to="/" className=" rounded-full flex items-center ">
+              <img className="w-12 h-12 object-contain rounded-full ml-2 " src="/PMG.svg" alt="لوگو" />
+              <h2 className='font-semibold text-xl ' >پارس ماکان قطعه</h2>
+
             </Link>
 
-            {/* منوی دسکتاپ */}
+            {/* Desktop Nav */}
             <nav className="hidden md:flex">
-              <div className="flex items-center gap-8">
+              <div className="flex items-center gap-6">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`px-4 py-3 rounded-lg text-base font-semibold transition-all duration-300 flex items-center gap-3 group ${
+                    className={`px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 flex items-center gap-2 group ${
                       isActive(item.path)
-                        ? 'text-blue-600 bg-blue-50 shadow-sm'
-                        : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                        ? 'text-orange-600 bg-orange-50 shadow-sm'
+                        : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
                     }`}
                   >
-                    <item.icon className={`w-5 h-5 group-hover:scale-110 transition-transform duration-200 ${
-                      isActive(item.path) ? 'text-blue-600' : ''
-                    }`} />
+                    <item.icon
+                      className={`w-5 h-5 group-hover:scale-110 transition-transform duration-200 ${
+                        isActive(item.path) ? 'text-orange-600' : ''
+                      }`}
+                    />
                     {item.name}
                   </Link>
                 ))}
               </div>
             </nav>
 
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <div className="md:hidden">
               <button
                 onClick={toggleMenu}
-                className="text-gray-700 hover:text-blue-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="text-gray-700 hover:text-orange-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
               </button>
@@ -87,10 +97,10 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`flex items-center gap-4 px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-semibold  transition-all duration-200 ${
                     isActive(item.path)
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      ? 'text-orange-600 bg-orange-50'
+                      : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -103,23 +113,25 @@ const Header = () => {
         )}
       </header>
 
-      {/* نوار پایین موبایل */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 md:hidden z-50 shadow-2xl">
+      {/* Mobile Bottom Nav */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-100 md:hidden z-50 shadow-xl">
         <div className="grid grid-cols-4">
           {navItems.map((item) => (
             <Link
               key={item.name}
               to={item.path}
-              className={`flex flex-col items-center py-4 px-2 transition-all duration-300 group ${
+              className={`flex flex-col items-center py-3 px-2 transition-all duration-300 group ${
                 isActive(item.path)
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-orange-600 bg-orange-50'
+                  : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
               }`}
             >
-              <item.icon className={`w-7 h-7 mb-2 group-hover:scale-110 transition-transform duration-200 ${
-                isActive(item.path) ? 'text-blue-600' : ''
-              }`} />
-              <span className="text-xs font-semibold leading-tight text-center">{item.name}</span>
+              <item.icon
+                className={`w-6 h-6 mb-1 group-hover:scale-110 transition-transform duration-200 ${
+                  isActive(item.path) ? 'text-orange-600' : ''
+                }`}
+              />
+              <span className="text-xs font-semibold leading-tight">{item.name}</span>
             </Link>
           ))}
         </div>

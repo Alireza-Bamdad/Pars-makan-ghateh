@@ -2,7 +2,16 @@ const express = require('express');
 const { body, validationResult, param } = require('express-validator');
 const Category = require('../models/Category');
 const { auth, isAdmin } = require('../middleware/auth');
+const { uploadSingle, handleUploadError, deleteFile, getFileUrl } = require('../middleware/upload');
 const router = express.Router();
+
+// برای validation slug
+const slugValidation = (value) => {
+  if (!value) return true; // اختیاری است
+  // فقط حروف فارسی، انگلیسی، اعداد و خط تیره مجاز
+  return /^[\u0600-\u06FFa-z0-9]+(?:-[\u0600-\u06FFa-z0-9]+)*$/.test(value);
+};
+
 
 // @route   GET /api/categories
 // @desc    Get all active categories (Public)
@@ -20,50 +29,6 @@ router.get('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Get categories error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'خطای سرور'
-    });
-  }
-});
-
-// @route   GET /api/categories/:slug
-// @desc    Get single category by slug (Public)
-// @access  Public
-router.get('/:slug', [
-  param('slug').notEmpty().withMessage('slug الزامی است')
-], async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'اطلاعات وارد شده صحیح نیست',
-        errors: errors.array()
-      });
-    }
-
-    const category = await Category.findOne({ 
-      slug: req.params.slug, 
-      isActive: true 
-    });
-
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: 'دسته‌بندی یافت نشد'
-      });
-    }
-
-    // Update products count
-    await category.updateProductsCount();
-
-    res.json({
-      success: true,
-      data: { category }
-    });
-  } catch (error) {
-    console.error('Get category error:', error);
     res.status(500).json({
       success: false,
       message: 'خطای سرور'
@@ -143,11 +108,11 @@ router.post('/admin', [
     .trim()
     .isLength({ min: 1, max: 100 })
     .withMessage('نام دسته‌بندی باید بین ۱ تا ۱۰۰ کاراکتر باشد'),
-  body('slug')
-    .optional()
-    .trim()
-    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .withMessage('slug باید فقط شامل حروف انگلیسی، اعداد و خط تیره باشد'),
+    // در validation rules
+    body('slug')
+      .optional()
+      .custom(slugValidation)
+      .withMessage('slug باید فقط شامل حروف فارسی، انگلیسی، اعداد و خط تیره باشد'),
   body('description')
     .optional()
     .trim()
@@ -259,11 +224,10 @@ router.put('/admin/:id', [
     .trim()
     .isLength({ min: 1, max: 100 })
     .withMessage('نام دسته‌بندی باید بین ۱ تا ۱۰۰ کاراکتر باشد'),
-  body('slug')
-    .optional()
-    .trim()
-    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .withMessage('slug باید فقط شامل حروف انگلیسی، اعداد و خط تیره باشد'),
+body('slug')
+  .optional()
+  .custom(slugValidation)
+  .withMessage('slug باید فقط شامل حروف فارسی، انگلیسی، اعداد و خط تیره باشد'),
   body('description')
     .optional()
     .trim()
@@ -382,6 +346,50 @@ router.delete('/admin/:id', [
 
   } catch (error) {
     console.error('Delete category error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'خطای سرور'
+    });
+  }
+});
+
+// @route   GET /api/categories/:slug
+// @desc    Get single category by slug (Public)
+// @access  Public
+router.get('/:slug', [
+  param('slug').notEmpty().withMessage('slug الزامی است')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'اطلاعات وارد شده صحیح نیست',
+        errors: errors.array()
+      });
+    }
+
+    const category = await Category.findOne({ 
+      slug: req.params.slug, 
+      isActive: true 
+    });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: 'دسته‌بندی یافت نشد'
+      });
+    }
+
+    // Update products count
+    await category.updateProductsCount();
+
+    res.json({
+      success: true,
+      data: { category }
+    });
+  } catch (error) {
+    console.error('Get category error:', error);
     res.status(500).json({
       success: false,
       message: 'خطای سرور'

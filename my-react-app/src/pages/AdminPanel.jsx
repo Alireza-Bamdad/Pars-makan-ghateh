@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ProductList from "../components/Products/ProductManagement";
-// import CategoryList from "./components/Categories/CategoryList";
+import CategoryManagement from "../components/Categories/CategoryManagement";
 // import CompanyInfo from "./components/Company/CompanyInfo";
 
 export default function AdminPanel() {
@@ -22,18 +22,18 @@ export default function AdminPanel() {
         >
           مدیریت دسته‌بندی
         </button>
-        <button 
+        {/* <button 
           onClick={() => setActiveTab("company")} 
           className={activeTab === "company" ? "font-bold" : ""}
         >
           مدیریت اطلاعات شرکت
-        </button>
+        </button> */}
       </div>
 
       {/* Content */}
       {activeTab === "products" && <ProductList />}
-      {activeTab === "categories" && <CategoryList />}
-      {activeTab === "company" && <CompanyInfo />}
+      {activeTab === "categories" && <CategoryManagement />}
+      {/* {activeTab === "company" && <CompanyInfo />} */}
     </div>
   );
 }

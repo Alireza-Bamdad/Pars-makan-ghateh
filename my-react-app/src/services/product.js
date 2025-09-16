@@ -1,5 +1,5 @@
 import { api } from './api';
-
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 // =====================
 // PRODUCT MANAGEMENT
 // =====================
@@ -95,7 +95,7 @@ export const updateProduct = async (id, productData) => {
   
   // Add text fields
   Object.keys(productData).forEach(key => {
-    if (key !== 'images' && productData[key] !== undefined) {
+    if (key !== 'images' && productData[key] !== undefined && productData[key] !== null) {
       if (typeof productData[key] === 'object') {
         formData.append(key, JSON.stringify(productData[key]));
       } else {
@@ -106,8 +106,11 @@ export const updateProduct = async (id, productData) => {
   
   // Add new image files if exist
   if (productData.images && productData.images.length > 0) {
+    // بررسی کنید که آیا فایل است یا آبجکت (از قبل آپلود شده)
     productData.images.forEach(image => {
-      formData.append('images', image);
+      if (image instanceof File) {
+        formData.append('images', image);
+      }
     });
   }
   
@@ -127,6 +130,24 @@ export const deleteProduct = async (id) => {
 
 // Delete specific image from product (admin)
 export const deleteProductImage = async (productId, imageIndex) => {
-  const { data } = await api.delete(`/products/admin/${productId}/image/${imageIndex}`);
-  return data;
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/api/products/${productId}/images/${imageIndex}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to delete image');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting product image:', error);
+    throw error;
+  }
 };

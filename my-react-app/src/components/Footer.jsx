@@ -28,16 +28,16 @@ const Footer = () => {
   ];
 
   const services = [
-    'طراحی و تولید قطعات',
-    'مشاوره فنی',
-    'خدمات پس از فروش',
-    'تعمیر و نگهداری'
+    'عرضه محصولات با کیفیت',
+    ' وارد کننده انوع قطعات خودرو',
+    'تضمین کیفیت',
+  
   ];
 
   const contactInfo = [
-    { icon: Phone, text: '۰۲۱-۱۲۳۴۵۶۷۸', type: 'tel' },
-    { icon: Mail, text: 'info@parsmakanghate.com', type: 'email' },
-    { icon: MapPin, text: 'تهران، خیابان آزادی، پلاک ۱۲۳', type: 'address' },
+    { icon: Phone, text: '090173271310', type: 'tel' },
+    { icon: Mail, text: 'parsmakanghate@gamil.com', type: 'email' },
+    { icon: MapPin, text: 'شیراز - میدان مطهری - مجتمع الهیه', type: 'address' },
     { icon: Clock, text: 'شنبه تا پنجشنبه: ۸ تا ۱۷', type: 'time' }
   ];
 
@@ -58,18 +58,7 @@ const Footer = () => {
       `}</style>
 
       <footer className="bg-gray-900 text-white">
-        {/* دکمه بازگشت به بالا */}
-        <div className="bg-blue-600 py-4">
-          <div className="max-w-7xl mx-auto px-4 flex justify-center">
-            <button
-              onClick={scrollToTop}
-              className="flex items-center gap-2 text-white hover:text-gray-200 transition-colors duration-200 group"
-            >
-              <ChevronUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-200" />
-              <span className="font-semibold">بازگشت به بالا</span>
-            </button>
-          </div>
-        </div>
+
 
         {/* محتوای اصلی فوتر */}
         <div className="py-16">
@@ -79,16 +68,16 @@ const Footer = () => {
               {/* درباره شرکت */}
               <div className="lg:col-span-1">
                 <div className="flex items-center mb-6">
-                  <div className="bg-blue-600 text-white w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg shadow-lg">
-                    PMG
+                  <div className="bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-black text-lg shadow-lg">
+                    <img src="/PMG.svg" alt="" className='rounded-full' />
                   </div>
                   <h3 className="mr-3 text-xl font-black text-white">
                     پارس ماکان قطعه
                   </h3>
                 </div>
                 <p className="text-gray-300 leading-relaxed mb-6">
-                  تولیدکننده قطعات صنعتی با کیفیت و استاندارد بین‌المللی. 
-                  ما متعهد به ارائه بهترین محصولات و خدمات به مشتریان خود هستیم.
+                 وارد کننده انواع لوازم یدکی خودرو  <br/>  فروش عمده به سراسر ایران
+
                 </p>
                 
                 {/* شبکه‌های اجتماعی */}
@@ -158,29 +147,13 @@ const Footer = () => {
                   ))}
                 </div>
 
-                {/* خبرنامه */}
-                <div className="mt-8">
-                  <h4 className="text-lg font-semibold text-white mb-4">عضویت در خبرنامه</h4>
-                  <div className="flex gap-2">
-                    <input
-                      type="email"
-                      placeholder="ایمیل خود را وارد کنید"
-                      className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    />
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
-                      عضویت
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* خط تقسیم */}
         <div className="border-t border-gray-800"></div>
 
-        {/* کپی‌رایت */}
         <div className="py-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -188,13 +161,13 @@ const Footer = () => {
                 <p>© ۱۴۰۳ پارس ماکان قطعه. تمامی حقوق محفوظ است.</p>
               </div>
               <div className="flex gap-6 text-sm text-gray-400">
-                <Link to="/privacy" className="hover:text-white transition-colors">
+                <Link to="#" className="hover:text-white transition-colors">
                   حریم خصوصی
                 </Link>
-                <Link to="/terms" className="hover:text-white transition-colors">
+                <Link to="#" className="hover:text-white transition-colors">
                   قوانین و مقررات
                 </Link>
-                <Link to="/sitemap" className="hover:text-white transition-colors">
+                <Link to="#" className="hover:text-white transition-colors">
                   نقشه سایت
                 </Link>
               </div>
@@ -202,7 +175,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* فاصله برای نوار پایین موبایل */}
         <div className="h-20 md:h-0"></div>
       </footer>
     </div>

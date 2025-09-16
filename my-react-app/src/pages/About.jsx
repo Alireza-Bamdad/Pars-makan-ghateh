@@ -6,26 +6,25 @@ const About = () => {
     <div className="min-h-screen bg-white py-12">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-black text-gray-900 mb-4">درباره ما</h1>
-          <p className="text-xl text-gray-600">داستان شرکت پارس ماکان قطعه</p>
+          <p className="text-xl font-bold text-gray-600">داستان شرکت پارس ماکان قطعه</p>
         </div>
         
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">ماموریت ما</h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              شرکت پارس ماکان قطعه با هدف تولید قطعات صنعتی با کیفیت و استاندارد بین‌المللی 
-              فعالیت خود را آغاز کرده است. ما متعهد به ارائه بهترین محصولات و خدمات به مشتریان خود هستیم.
-            </p>
+          <div className="bg-gray-100 rounded-2xl p-8 mb-8">
+            <p className="text-lg text-gray-700 leading-relaxed px-2">
+              شرکت پارس ماکان قطعه با سال‌ها تجربه در زمینه واردات قطعات خودرو، اکنون به صورت رسمی فعالیت خود را ادامه می‌دهد. هدف ما ارائه قطعات با کیفیت، اصل و متنوع برای انواع خودروها است تا همواره نیاز مشتریان خود را به بهترین شکل برآورده کنیم.
+              تیم ما با دانش فنی و شبکه گسترده تأمین‌کنندگان بین‌المللی، تلاش می‌کند فرایند خرید قطعات خودرو را برای شما ساده، سریع و مطمئن کند.
+              در پارس ماکان قطعه، کیفیت و رضایت شما اولویت ماست.
+              </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">۱۵+</span>
+                <span className="text-2xl font-bold text-blue-600">20+</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">سال تجربه</h3>
-              <p className="text-gray-600">در تولید قطعات صنعتی</p>
+              <p className="text-gray-600">در زمینه واردات قطعات صنعتی</p>
             </div>
             
             <div className="text-center">

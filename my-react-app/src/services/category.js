@@ -1,6 +1,5 @@
 import { api } from './api';
 
-
 // =====================
 // CATEGORY MANAGEMENT
 // =====================
@@ -28,6 +27,17 @@ export const getAdminCategories = async (params = {}) => {
 
 // Create new category (admin)
 export const createCategory = async (categoryData) => {
+  // FIXED: Check if categoryData is already FormData
+  if (categoryData instanceof FormData) {
+    const { data } = await api.post("/categories/admin", categoryData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return data;
+  }
+  
+  // Original logic for object data
   const formData = new FormData();
   
   // Add text fields
@@ -50,8 +60,19 @@ export const createCategory = async (categoryData) => {
   return data;
 };
 
-// Update category (admin)
+// Update category (admin) - FIXED
 export const updateCategory = async (id, categoryData) => {
+  // Check if categoryData is FormData (for file uploads) or regular object
+  if (categoryData instanceof FormData) {
+    const { data } = await api.put(`/categories/admin/${id}`, categoryData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return data;
+  }
+  
+  // For regular object updates
   const { data } = await api.put(`/categories/admin/${id}`, categoryData);
   return data;
 };
