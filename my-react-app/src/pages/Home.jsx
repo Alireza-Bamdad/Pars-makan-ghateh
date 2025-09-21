@@ -1,12 +1,15 @@
 // pages/Home.jsx
 import { getProducts } from '../services/product';
 import { getCategories } from '../services/category';
-import React, { useEffect, useState } from 'react';
-import { Phone } from 'lucide-react'; // 👈 آیکون تلفن
+import React, { useEffect, useState , useRef } from 'react';
+import { Phone, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const scrollRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -30,6 +33,13 @@ const Home = () => {
     }
     return '/default-product.png';
   };
+    const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollAmount = direction === 'left' ? scrollLeft - clientWidth / 2 : scrollLeft + clientWidth / 2;
+      scrollRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   const getCategoryImage = (category) => {
     if (category.images && category.images.length > 0) {
@@ -39,12 +49,11 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen mx-2 md:mx-4">
       {/* Banner */}
-      <div className="relative w-full h-72 md:h-102 overflow-hidden">
+      <div className="relative w-full h-45 md:h-102 overflow-hidden rounded mt-8">
         <img src="/baner.svg" alt="Banner" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/70 to-black/50 flex items-center justify-center">
-          <h1 className="text-3xl md:text-5xl font-extrabold  drop-shadow-lg"></h1>
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-300/70 to-black/50 flex items-center justify-center">
         </div>
       </div>
 
@@ -57,9 +66,7 @@ const Home = () => {
               <div
                 key={category._id || category.id}
                 className="flex flex-col items-center cursor-pointer group"
-                onClick={() =>
-                  (window.location.href = `/products?category=${category._id || category.id}`)
-                }
+                onClick={() => navigate('/products')}
               >
                 <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden shadow-lg border-4 border-orange-500 bg-white group-hover:scale-110 transition-all duration-300">
                   <img
@@ -80,50 +87,63 @@ const Home = () => {
         </div>
 
         {/* Products Section */}
-        <div>
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-extrabold text-gray-900">محصولات ما</h2>
-            <button
-              className="text-orange-600 px-6 py-2 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-              onClick={() => (window.location.href = '/products')}
-            >
-              مشاهده همه
-            </button>
-          </div>
+        <div className=" px-6">
+              <h2 className="text-3xl font-extrabold mb-6">محصولات ما</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {products.slice(0, 8).map((product) => (
-              <div
-                key={product._id || product.id}
-                className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
-                onClick={() =>
-                  (window.location.href = `/product/${product.slug || product.id}`)
-                }
-              >
-                <div className="w-full h-52 overflow-hidden relative">
-                  <img
-                    src={getProductImage(product)}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    onError={(e) => {
-                      e.target.src = '/default-product.png';
-                    }}
-                  />
+              <div className="relative">
+                {/* فلش چپ */}
+                <button
+                  onClick={() => scroll('left')}
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg z-10 hover:bg-orange-500 hover:text-white transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                {/* کانتینر اسکرول افقی */}
+                <div
+                  ref={scrollRef}
+                  className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide scroll-smooth"
+                >
+                  {products.slice(0, 8).map((product) => (
+                    <div
+                      key={product._id || product.id}
+                      className="min-w-[200px] bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex-shrink-0"
+                    >
+                      <div className="w-full h-44 overflow-hidden relative">
+                        <img
+                          src={getProductImage(product)}
+                          alt={product.name}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          onError={(e) => { e.target.src = '/default-product.png'; }}
+                          onClick={() => navigate(`/product/${product.slug}`)}
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-bold text-md text-gray-900 mb-1 line-clamp-2">{product.name}</h3>
+                        <span className="text-xs font-bold text-orange-600">
+                          برای استعلام قیمت تماس بگیرید
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="p-5">
-                  <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2">
-                    {product.name}
-                  </h3>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-extrabold text-orange-600">
-                      برای استعلام قیمت با کارشناس فروش تماس بگیرید
-                    </span>
-                  </div>
-                </div>
+
+                {/* فلش راست */}
+                <button
+                  onClick={() => scroll('right')}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg z-10 hover:bg-orange-500 hover:text-white transition-colors"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
-            ))}
-          </div>
+
+              {/* کلاس CSS برای مخفی کردن scrollbar */}
+              <style>{`
+                .scrollbar-hide::-webkit-scrollbar { display: none; }
+                .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+              `}</style>
         </div>
+
       </div>
 
       {/* Floating Phone Button 👇 */}

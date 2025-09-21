@@ -298,12 +298,10 @@ const ProductDetailPage = () => {
             <div className="contact-section">
               <h3>برای استعلام قیمت و خرید تماس بگیرید:</h3>
               <div className="contact-buttons">
-                <a href="tel:+989123456789" className="contact-btn phone-btn">
-                  📞 تماس تلفنی
+                <a href="tel:+989173271310" className="contact-btn phone-btn">
+                   تماس تلفنی
                 </a>
-                <a href="https://wa.me/989123456789" className="contact-btn whatsapp-btn" target="_blank" rel="noopener noreferrer">
-                  💬 واتساپ
-                </a>
+   
               </div>
             </div>
           )}
@@ -311,14 +309,16 @@ const ProductDetailPage = () => {
       </div>
 
       {/* Product Description */}
-      {product.description && (
-        <div className="product-description-section">
-          <h2>توضیحات محصول</h2>
-          <div className="description-content">
-            <p>{product.description}</p>
-          </div>
-        </div>
-      )}
+{product.description && (
+  <div className="product-description-section">
+    <h2>توضیحات محصول</h2>
+    <div
+      className="description-content"
+      dangerouslySetInnerHTML={{ __html: product.description }}
+    />
+  </div>
+)}
+
 
       {/* Technical Specifications */}
       <div className="product-specifications">
@@ -354,14 +354,7 @@ const ProductDetailPage = () => {
             <span className="spec-label">وضعیت</span>
             <span className="spec-value">{product.isActive ? 'موجود' : 'ناموجود'}</span>
           </div>
-          {product.createdAt && (
-            <div className="spec-item">
-              <span className="spec-label">تاریخ افزودن</span>
-              <span className="spec-value">
-                {new Date(product.createdAt).toLocaleDateString('fa-IR')}
-              </span>
-            </div>
-          )}
+
         </div>
       </div>
 

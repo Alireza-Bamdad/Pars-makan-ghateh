@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, maxlength: 200 },
     slug: { type: String, unique: true, lowercase: true, trim: true },
-    description: { type: String, required: true, trim: true, maxlength: 2000 },
+    description: { type: String, required: true, trim: true, maxlength: 15000 },
     shortDescription: { type: String, trim: true, maxlength: 300 },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     partNumber: { type: String, required: true },

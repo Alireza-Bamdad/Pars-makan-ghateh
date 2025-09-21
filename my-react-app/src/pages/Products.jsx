@@ -86,7 +86,7 @@ const ProductsPage = () => {
   }, [searchTerm, selectedCategory, products]);
 
   const formatPrice = (price) =>
-    price ? `${price.toLocaleString("fa-IR")} تومان` : "قیمت تماسی";
+    price ? `${price.toLocaleString("fa-IR")} تومان` : "برای استعلام قیمت تماس بگیرید";
 
   const handleViewDetails = (product) => {
     navigate(`/product/${product.slug || product._id}`);
@@ -127,7 +127,7 @@ const ProductsPage = () => {
 
   return (
     <div className="min-h-screen ">
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-2 py-8">
         {/* Search and Filters */}
         <div className="bg-white rounded-2xl shadow-xl p-4 mb-12 border border-gray-100">
           <div className="flex flex-col lg:flex-row gap-6 items-center">
@@ -195,15 +195,15 @@ const ProductsPage = () => {
             </p>
           </div>
         ) : (
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className=" grid gap-2 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {filteredProducts.map((product) => (
               <div
                 key={product._id || product.id}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden border border-gray-100 hover:border-orange-200 transform hover:-translate-y-2"
+                className="w-62 lg:w-68 xl:w-80  w-full h-full group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden border border-gray-100 hover:border-orange-200 transform hover:-translate-y-2 "
                 onClick={() => handleViewDetails(product)}
               >
                 {/* Product Image */}
-                <div className="relative h-64 w-full overflow-hidden bg-gray-100">
+                <div className=" sm:h-62 lg:h-68 xl:h-72 relative h-35 w-full overflow-hidden bg-gray-100">
                   <img
                     src={getProductImage(product)}
                     alt={product.name}
@@ -234,16 +234,16 @@ const ProductsPage = () => {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-6">
+                <div className="px-2 py-2">
                   {/* Product Name */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-700 transition-colors duration-300">
+                  <h3 className="text-xs  sm:text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-700 transition-colors duration-300">
                     {product.name}
                   </h3>
 
                   {/* Brand */}
                   {product.brand && (
-                    <p className="text-sm text-gray-500 mb-2 font-medium">
-                      برند: {product.brand}
+                    <p className="text-xs  sm:text-sm text-gray-500 mb-2 ">
+                       {product.brand}
                     </p>
                   )}
 
@@ -254,25 +254,19 @@ const ProductsPage = () => {
                     </p>
                   )}
 
-                  {/* Description */}
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
-                    {product.shortDescription || product.description || 'توضیحات محصول'}
-                  </p>
 
                   {/* Price and Action */}
-                  <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                    <div className="flex flex-col">
-                      <span className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500">
+                  <div className="lg:flex flex-col   justify-center  items-center pt-2 border-t border-gray-100">
+
+                    <div className="flex flex-col py-1">
+                      <span className=" text-xs font-semibold sm:text-sm sm:font-bold ml-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500">
                         {formatPrice(product.price)}
                       </span>
                     </div>
-                    
-                    <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-2 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2">
-                      <span>جزئیات</span>
-                      <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
+                    <button className="px-5 py-2  bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white  rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center ">
+                      <span className="text-sm font-bold ">جزئیات</span>
                     </button>
+
                   </div>
                 </div>
               </div>

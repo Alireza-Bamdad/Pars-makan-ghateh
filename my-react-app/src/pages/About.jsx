@@ -24,7 +24,7 @@ const About = () => {
                 <span className="text-2xl font-bold text-blue-600">20+</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">سال تجربه</h3>
-              <p className="text-gray-600">در زمینه واردات قطعات صنعتی</p>
+              <p className="text-gray-600">در زمینه واردات قطعات خودرو</p>
             </div>
             
             <div className="text-center">

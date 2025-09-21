@@ -1,18 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Clock, 
-  Home, 
-  Package, 
-  Info, 
-  Users,
-  Instagram,
-  Twitter,
-  Linkedin,
-  ChevronUp
+  Phone, Mail, MapPin, Clock, Home, Package, Info, Users,
+  Instagram, Twitter, Linkedin, ChevronUp,
+  MessageCircle, Send 
 } from 'lucide-react';
 
 const Footer = () => {
@@ -36,15 +27,16 @@ const Footer = () => {
 
   const contactInfo = [
     { icon: Phone, text: '090173271310', type: 'tel' },
-    { icon: Mail, text: 'parsmakanghate@gamil.com', type: 'email' },
+    { icon: Mail, text: 'parsmakanghateh@gamil.com', type: 'email' },
     { icon: MapPin, text: 'شیراز - میدان مطهری - مجتمع الهیه', type: 'address' },
     { icon: Clock, text: 'شنبه تا پنجشنبه: ۸ تا ۱۷', type: 'time' }
   ];
 
   const socialLinks = [
-    { name: 'اینستاگرام', icon: Instagram, href: '#', color: 'hover:text-pink-500' },
-    { name: 'توییتر', icon: Twitter, href: '#', color: 'hover:text-blue-400' },
-    { name: 'لینکدین', icon: Linkedin, href: '#', color: 'hover:text-blue-600' }
+    { name: 'اینستاگرام', icon: Instagram, href: 'https://www.instagram.com/parsmakanghateh?igsh=OTk2eDQzNTdlNGt5', color: 'hover:text-pink-500' },
+    { name: 'لینکدین', icon: Linkedin, href: '#', color: 'hover:text-blue-600' },
+    { name: 'واتساپ', icon: MessageCircle, href: 'https://wa.me/message/4ZY3SFZGWWUBJ1', color: 'hover:text-green-500' },
+    { name: 'تلگرام', icon: Send, href: 'https://t.me/ParsMakanGhateh', color: 'hover:text-sky-400' },
   ];
 
   return (
@@ -158,7 +150,7 @@ const Footer = () => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-gray-400 text-center md:text-right">
-                <p>© ۱۴۰۳ پارس ماکان قطعه. تمامی حقوق محفوظ است.</p>
+                <p>© ۱۴۰۴ پارس ماکان قطعه. تمامی حقوق محفوظ است.</p>
               </div>
               <div className="flex gap-6 text-sm text-gray-400">
                 <Link to="#" className="hover:text-white transition-colors">
