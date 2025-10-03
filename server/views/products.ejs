@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدیریت محصولات - پنل مدیریت</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f6fa;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 0;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .sidebar-header p {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-menu a.active::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: white;
+    }
+
+    .sidebar-menu a i {
+      margin-left: 12px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .main-content {
+      margin-right: 260px;
+      padding: 30px;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      color: #2c3e50;
+    }
+
+    .btn-primary {
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 15px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .filters-card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      align-items: end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 10px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .products-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: #f8f9fa;
+    }
+
+    th {
+      padding: 15px;
+      text-align: right;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2c3e50;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    .product-image {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .badge-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .badge-danger {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .badge-warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .btn-edit {
+      background: #3498db;
+    }
+
+    .btn-delete {
+      background: #e74c3c;
+    }
+
+    .btn-icon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .pagination button {
+      padding: 8px 15px;
+      border: 2px solid #e0e0e0;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination span {
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .modal-header h2 {
+      font-size: 24px;
+      color: #2c3e50;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #95a5a6;
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: #e74c3c;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .image-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .image-preview-item {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #e0e0e0;
+    }
+
+    .image-preview-item img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 25px;
+      height: 25px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #95a5a6;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .alert {
+      padding: 12px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(100%);
+      }
+
+      .main-content {
+        margin-right: 0;
+        padding: 20px;
+      }
+
+      .filters-grid,
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>پنل مدیریت</h2>
+      <p id="adminName">در حال بارگذاری...</p>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li>
+        <a href="/dashboard">
+          <i class="fas fa-home"></i>
+          <span>داشبورد</span>
+        </a>
+      </li>
+      <li>
+        <a href="/products" class="active">
+          <i class="fas fa-box"></i>
+          <span>محصولات</span>
+        </a>
+      </li>
+      <li>
+        <a href="/categories">
+          <i class="fas fa-folder"></i>
+          <span>دسته‌بندی‌ها</span>
+        </a>
+      </li>
+      <li>
+        <a href="/change-password">
+          <i class="fas fa-key"></i>
+          <span>تغییر رمز عبور</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> خروج
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>مدیریت محصولات</h1>
+      <button class="btn-primary" onclick="openProductModal()">
+        <i class="fas fa-plus"></i>
+        محصول جدید
+      </button>
+    </div>
+
+    <div class="filters-card">
+      <div class="filters-grid">
+        <div class="form-group">
+          <label>جستجو</label>
+          <input type="text" id="searchInput" placeholder="نام، برند، شماره قطعه...">
+        </div>
+        <div class="form-group">
+          <label>دسته‌بندی</label>
+          <select id="categoryFilter">
+            <option value="">همه دسته‌ها</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>وضعیت</label>
+          <select id="statusFilter">
+            <option value="all">همه</option>
+            <option value="active">فعال</option>
+            <option value="inactive">غیرفعال</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button class="btn-primary" onclick="filterProducts()" style="width: 100%;">
+            <i class="fas fa-search"></i>
+            جستجو
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="alertBox" class="alert"></div>
+
+    <div class="products-card">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>تصویر</th>
+              <th>نام محصول</th>
+              <th>برند</th>
+              <th>دسته‌بندی</th>
+              <th>شماره قطعه</th>
+              <th>وضعیت</th>
+              <th>عملیات</th>
+            </tr>
+          </thead>
+          <tbody id="productsTable">
+            <tr>
+              <td colspan="7">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  <p>در حال بارگذاری محصولات...</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">محصول جدید</h2>
+        <button class="close-modal" onclick="closeProductModal()">&times;</button>
+      </div>
+
+      <form id="productForm" enctype="multipart/form-data">
+        <input type="hidden" id="productId">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>نام محصول *</label>
+            <input type="text" id="productName" required>
+          </div>
+          <div class="form-group">
+            <label>برند *</label>
+            <input type="text" id="productBrand" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>شماره قطعه *</label>
+            <input type="text" id="productPartNumber" required>
+          </div>
+          <div class="form-group">
+            <label>نوع خودرو *</label>
+            <input type="text" id="productCarType" required>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label>دسته‌بندی *</label>
+            <select id="productCategory" required>
+              <option value="">انتخاب کنید...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label>توضیحات کوتاه</label>
+            <textarea id="productShortDesc"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label>توضیحات کامل *</label>
+            <textarea id="productDescription" required></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>ترتیب نمایش</label>
+            <input type="number" id="productSortOrder" value="0" min="0">
+          </div>
+          <div class="form-group">
+            <label style="margin-bottom: 20px;">تنظیمات</label>
+            <div style="display: flex; gap: 15px;">
+              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                <input type="checkbox" id="productIsFeatured">
+                <span>ویژه</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                <input type="checkbox" id="productIsActive" checked>
+                <span>فعال</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label>تصاویر محصول <span id="imageRequired">*</span></label>
+            <input type="file" id="productImages" multiple accept="image/*">
+            <small style="color: #95a5a6; font-size: 12px;">برای محصول جدید حداقل یک تصویر الزامی است</small>
+            <div class="image-preview" id="imagePreview"></div>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+            <i class="fas fa-save"></i>
+            <span id="submitBtn">ذخیره محصول</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('authToken');
+    if (!token) window.location.href = '/login';
+
+    let currentPage = 1;
+    let currentEditId = null;
+    let categories = [];
+
+    fetch('/api/auth/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('adminName').textContent = data.data.user.name;
+      } else {
+        logout();
+      }
+    });
+
+    async function fetchCategories() {
+      try {
+        const response = await fetch('/api/categories/admin/all?limit=100', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          categories = data.data.categories;
+          
+          const categoryFilter = document.getElementById('categoryFilter');
+          const productCategory = document.getElementById('productCategory');
+          
+          categories.forEach(cat => {
+            categoryFilter.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+            productCategory.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    }
+
+    async function fetchProducts(page = 1) {
+      const search = document.getElementById('searchInput').value;
+      const category = document.getElementById('categoryFilter').value;
+      const status = document.getElementById('statusFilter').value;
+
+      let url = `/api/products/admin?page=${page}&limit=10`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+      if (category) url += `&category=${category}`;
+      if (status !== 'all') url += `&status=${status}`;
+
+      try {
+        const response = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          displayProducts(data.data.products);
+          displayPagination(data.data.pagination);
+          currentPage = page;
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        showAlert('خطا در بارگذاری محصولات', 'error');
+      }
+    }
+
+    function displayProducts(products) {
+      const tbody = document.getElementById('productsTable');
+      
+      if (products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">محصولی یافت نشد</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = products.map(product => {
+        const mainImage = product.images && product.images.length > 0 
+          ? product.images.find(img => img.isMain)?.url || product.images[0].url || product.images[0]
+          : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+
+        return `
+          <tr>
+            <td>
+              <img src="${mainImage}" alt="${product.name}" class="product-image">
+            </td>
+            <td><strong>${product.name}</strong></td>
+            <td>${product.brand}</td>
+            <td>${product.category?.name || '-'}</td>
+            <td>${product.partNumber}</td>
+            <td>
+              <span class="badge ${product.isActive ? 'badge-success' : 'badge-danger'}">
+                ${product.isActive ? 'فعال' : 'غیرفعال'}
+              </span>
+              ${product.isFeatured ? '<span class="badge badge-warning">ویژه</span>' : ''}
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon btn-edit" onclick="editProduct('${product._id}')" title="ویرایش">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete" onclick="deleteProduct('${product._id}', '${product.name}')" title="حذف">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function displayPagination(pagination) {
+      const paginationDiv = document.getElementById('pagination');
+      paginationDiv.innerHTML = `
+        <button onclick="fetchProducts(${pagination.currentPage - 1})" ${pagination.currentPage === 1 ? 'disabled' : ''}>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <span>صفحه ${pagination.currentPage} از ${pagination.totalPages}</span>
+        <button onclick="fetchProducts(${pagination.currentPage + 1})" ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      `;
+    }
+
+    function filterProducts() {
+      fetchProducts(1);
+    }
+
+    function openProductModal(productId = null) {
+      currentEditId = productId;
+      document.getElementById('productModal').classList.add('show');
+      document.getElementById('modalTitle').textContent = productId ? 'ویرایش محصول' : 'محصول جدید';
+      
+      if (!productId) {
+        document.getElementById('productForm').reset();
+        document.getElementById('imagePreview').innerHTML = '';
+        document.getElementById('productIsActive').checked = true;
+        document.getElementById('productImages').value = '';
+        document.getElementById('imageRequired').style.display = 'inline';
+      } else {
+        document.getElementById('imageRequired').style.display = 'none';
+      }
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('show');
+      currentEditId = null;
+      document.getElementById('productImages').value = '';
+    }
+
+    async function editProduct(id) {
+      try {
+        const response = await fetch(`/api/products/admin?page=1&limit=100`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        
+        const product = data.data.products.find(p => p._id === id);
+        if (!product) return;
+
+        document.getElementById('productId').value = product._id;
+        document.getElementById('productName').value = product.name;
+        document.getElementById('productBrand').value = product.brand;
+        document.getElementById('productPartNumber').value = product.partNumber;
+        document.getElementById('productCarType').value = product.carType;
+        document.getElementById('productCategory').value = product.category?._id || '';
+        document.getElementById('productShortDesc').value = product.shortDescription || '';
+        document.getElementById('productDescription').value = product.description;
+        document.getElementById('productSortOrder').value = product.sortOrder;
+        document.getElementById('productIsFeatured').checked = product.isFeatured;
+        document.getElementById('productIsActive').checked = product.isActive;
+        document.getElementById('productImages').value = '';
+
+        if (product.images && product.images.length > 0) {
+          const previewDiv = document.getElementById('imagePreview');
+          previewDiv.innerHTML = product.images.map((img, index) => `
+            <div class="image-preview-item">
+              <img src="${img.url || img}" alt="${product.name}">
+              <button type="button" class="remove-image" onclick="removeExistingImage('${product._id}', ${index})">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          `).join('');
+        }
+
+        openProductModal(product._id);
+      } catch (error) {
+        console.error('Error loading product:', error);
+        showAlert('خطا در بارگذاری اطلاعات محصول', 'error');
+      }
+    }
+
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('productName').value);
+      formData.append('brand', document.getElementById('productBrand').value);
+      formData.append('partNumber', document.getElementById('productPartNumber').value);
+      formData.append('carType', document.getElementById('productCarType').value);
+      formData.append('category', document.getElementById('productCategory').value);
+      formData.append('shortDescription', document.getElementById('productShortDesc').value);
+      formData.append('description', document.getElementById('productDescription').value);
+      formData.append('sortOrder', document.getElementById('productSortOrder').value);
+      formData.append('isFeatured', document.getElementById('productIsFeatured').checked);
+      formData.append('isActive', document.getElementById('productIsActive').checked);
+
+      const files = document.getElementById('productImages').files;
+      const productId = document.getElementById('productId').value;
+
+      if (!productId && files.length === 0) {
+        showAlert('لطفاً حداقل یک تصویر برای محصول انتخاب کنید', 'error');
+        return;
+      }
+
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          formData.append('images', files[i]);
+        }
+      }
+
+      const url = productId ? `/api/products/admin/${productId}` : '/api/products/admin';
+      const method = productId ? 'PUT' : 'POST';
+
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert(data.message || 'محصول با موفقیت ذخیره شد', 'success');
+          closeProductModal();
+          fetchProducts(currentPage);
+        } else {
+          showAlert(data.message || 'خطا در ذخیره محصول', 'error');
+        }
+      } catch (error) {
+        console.error('Error saving product:', error);
+        showAlert('خطا در ذخیره محصول', 'error');
+      }
+    });
+
+    async function deleteProduct(id, name) {
+      if (!confirm(`آیا از حذف محصول "${name}" اطمینان دارید؟`)) return;
+
+      try {
+        const response = await fetch(`/api/products/admin/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('محصول با موفقیت حذف شد', 'success');
+          fetchProducts(currentPage);
+        } else {
+          showAlert(data.message || 'خطا در حذف محصول', 'error');
+        }
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        showAlert('خطا در حذف محصول', 'error');
+      }
+    }
+
+    async function removeExistingImage(productId, imageIndex) {
+      if (!confirm('آیا از حذف این تصویر اطمینان دارید؟')) return;
+
+      try {
+        const response = await fetch(`/api/products/${productId}/images/${imageIndex}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('تصویر حذف شد', 'success');
+          editProduct(productId);
+        } else {
+          showAlert(data.message || 'خطا در حذف تصویر', 'error');
+        }
+      } catch (error) {
+        console.error('Error removing image:', error);
+        showAlert('خطا در حذف تصویر', 'error');
+      }
+    }
+
+    function showAlert(message, type) {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.textContent = message;
+      alertBox.className = `alert alert-${type} show`;
+      setTimeout(() => alertBox.classList.remove('show'), 3000);
+    }
+
+    function logout() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userName');
+      window.location.href = '/login';
+    }
+
+    fetchCategories();
+    fetchProducts();
+
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') filterProducts();
+    });
+
+    document.getElementById('productImages').addEventListener('change', (e) => {
+      const previewDiv = document.getElementById('imagePreview');
+      const productId = document.getElementById('productId').value;
+      
+      if (productId) {
+        previewDiv.innerHTML = '';
+      }
+      
+      Array.from(e.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = 'image-preview-item';
+          div.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+          previewDiv.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+</body>
+</html>

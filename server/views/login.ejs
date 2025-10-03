@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ورود به پنل مدیریت</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      width: 100%;
+      max-width: 450px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .login-header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .login-header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .login-body {
+      padding: 40px 30px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group input.error {
+      border-color: #f44336;
+    }
+
+    .error-message {
+      color: #f44336;
+      font-size: 13px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .alert {
+      padding: 12px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alert-error {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
+
+    .alert-success {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #81c784;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-login .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-login.loading .spinner {
+      display: block;
+    }
+
+    .btn-login.loading .btn-text {
+      display: none;
+    }
+
+    .login-footer {
+      text-align: center;
+      padding: 20px 30px;
+      background-color: #f5f5f5;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>پنل مدیریت</h1>
+      <p>برای ادامه وارد حساب کاربری خود شوید</p>
+    </div>
+
+    <div class="login-body">
+      <div id="alertBox" class="alert"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">ایمیل</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="example@domain.com"
+            required
+          >
+          <div class="error-message" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">رمز عبور</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="حداقل ۶ کاراکتر"
+            required
+          >
+          <div class="error-message" id="passwordError"></div>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span class="btn-text">ورود</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+    </div>
+
+    <div class="login-footer">
+      © ۲۰۲۵ تمامی حقوق محفوظ است
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const alertBox = document.getElementById('alertBox');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+
+    // Show alert function
+    function showAlert(message, type = 'error') {
+      alertBox.textContent = message;
+      alertBox.className = `alert alert-${type} show`;
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          alertBox.classList.remove('show');
+        }, 3000);
+      }
+    }
+
+    // Hide alert function
+    function hideAlert() {
+      alertBox.classList.remove('show');
+    }
+
+    // Clear field errors
+    function clearFieldError(field) {
+      field.classList.remove('error');
+      if (field.id === 'email') {
+        emailError.classList.remove('show');
+      } else if (field.id === 'password') {
+        passwordError.classList.remove('show');
+      }
+    }
+
+    // Show field error
+    function showFieldError(field, message) {
+      field.classList.add('error');
+      if (field.id === 'email') {
+        emailError.textContent = message;
+        emailError.classList.add('show');
+      } else if (field.id === 'password') {
+        passwordError.textContent = message;
+        passwordError.classList.add('show');
+      }
+    }
+
+    // Clear errors on input
+    emailInput.addEventListener('input', () => clearFieldError(emailInput));
+    passwordInput.addEventListener('input', () => clearFieldError(passwordInput));
+
+    // Handle form submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      clearFieldError(emailInput);
+      clearFieldError(passwordInput);
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      // Basic validation
+      let hasError = false;
+
+      if (!email) {
+        showFieldError(emailInput, 'ایمیل الزامی است');
+        hasError = true;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showFieldError(emailInput, 'فرمت ایمیل صحیح نیست');
+        hasError = true;
+      }
+
+      if (!password) {
+        showFieldError(passwordInput, 'رمز عبور الزامی است');
+        hasError = true;
+      } else if (password.length < 6) {
+        showFieldError(passwordInput, 'رمز عبور باید حداقل ۶ کاراکتر باشد');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Show loading state
+      loginBtn.classList.add('loading');
+      loginBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Store token in localStorage
+          localStorage.setItem('authToken', data.data.token);
+          localStorage.setItem('userName', data.data.user.name);
+          
+          showAlert('ورود موفق! در حال انتقال...', 'success');
+          
+          // Redirect to dashboard after 1 second
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 1000);
+        } else {
+          // Show error message
+          showAlert(data.message || 'خطا در ورود');
+          
+          // Show field-specific errors if available
+          if (data.errors && Array.isArray(data.errors)) {
+            data.errors.forEach(error => {
+              if (error.path === 'email') {
+                showFieldError(emailInput, error.msg);
+              } else if (error.path === 'password') {
+                showFieldError(passwordInput, error.msg);
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showAlert('خطا در برقراری ارتباط با سرور');
+      } finally {
+        // Hide loading state
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+      }
+    });
+
+    // Check if already logged in
+    window.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        // Verify token is still valid
+        fetch('/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = '/dashboard';
+          } else {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userName');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پارس مکان قطعه - خانه</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff;
+      overflow-x: hidden;
+    }
+.call-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px; /* یا right: 20px برای سمت راست */
+  width: 60px;
+  height: 60px;
+  background: #25d366; /* رنگ سبز واتساپ یا هر رنگ دلخواه */
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  z-index: 10000;
+  transition: all 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff; /* رنگ متن */
+  font-size: 24px;
+  font-weight: bold;
+}
+.call-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: all 0.3s;
+    }
+
+    .navbar.scrolled {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color:black;
+      text-decoration: none;
+    }
+    .btn{
+        display: inline-block; 
+        margin-top: 10px; 
+        padding: 8px 12px; 
+        background:inherit; 
+        border: 2px solid orangered;
+        color: black; 
+        border-radius: 5px; 
+        text-decoration: none; 
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .logo image {
+      font-size: 32px;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #2c3e50;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: #667eea;
+      transition: width 0.3s;
+    }
+
+    .nav-menu a:hover {
+      color: #667eea;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-top: 80px;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      padding: 30px;
+      z-index: 1;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .btn-hero {
+      display: inline-block;
+      padding: 15px 40px;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn-conter{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+.hero-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 500px; /* ارتفاع هیرو برای دسکتاپ */
+}
+
+@media (max-width: 768px) {
+  .hero-img {
+    max-height: 300px; /* ارتفاع هیرو برای موبایل */
+  }
+}
+
+    .btn-hero:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Categories Section */
+    .categories-section {
+      padding: 50px 12px;
+      
+    }
+    .about-sec{
+      padding: 80px 12px;
+      background-color: #fcfcfc;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      color: #2c3e50;
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+
+    .categories-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 20px 0;
+      scrollbar-width: thin;
+      scrollbar-color: #667eea #f0f0f0;
+    }
+
+    .categories-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .categories-container::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+
+    .categories-container::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+
+    .categories-scroll {
+      display: flex;
+      gap: 30px;
+      padding: 10px;
+    }
+    .category-card {
+      flex: 0 0 150px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .category-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid #FF7518;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+    .category-card:hover {
+      transform: translateY(-10px);
+    }
+
+  @media (max-width: 768px) {
+      .category-card {
+        flex: 0 0 120px;
+      }
+
+      .category-image {
+        width: 100px;
+        height: 100px;
+        border-width: 3px;
+      }
+
+      .category-name {
+        font-size: 14px;
+      }
+    }
+
+    .category-card:hover .category-image {
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      border-color: #667eea;
+    }
+
+    .category-name {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* Products Section */
+    .products-section {
+      padding:20px 12px;
+      background: white;
+    }
+
+    .products-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 20px 0;
+      scrollbar-width: thin;
+      scrollbar-color: #667eea #f0f0f0;
+    }
+
+    .products-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .products-container::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+
+    .products-container::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+
+    .products-scroll {
+      display: flex;
+      gap: 25px;
+      padding: 10px;
+    }
+
+    .product-card {
+      flex: 0 0 280px;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+
+    }
+
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f8f9fa;
+    }
+
+    .product-info {
+      padding: 20px;
+    }
+
+    .product-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .product-details {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 5px;
+    }
+
+    .product-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #2c3e50;
+      color: white;
+      padding: 50px 30px 30px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+@media (max-width: 768px) {
+  .product-card {
+    flex: 0 0 180px; /* عرض کوچکتر در موبایل */
+  }
+
+  .product-image {
+    height: 120px; /* ارتفاع عکس کمتر */
+  }
+
+  .product-name {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .product-details {
+    font-size: 12px;
+  }
+
+  .btn {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+}
+
+    .footer-section h3 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #667eea;
+    }
+
+    .footer-section p,
+    .footer-section a {
+      color: #bdc3c7;
+      text-decoration: none;
+      line-height: 2;
+      display: block;
+      transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+      color: white;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: #34495e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      background: #667eea;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #34495e;
+      color: #95a5a6;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #95a5a6;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    .logo-img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        width: 100%;
+        max-width: 300px;
+        background: white;
+        flex-direction: column;
+        padding: 30px;
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s;
+        height: calc(100vh - 70px);
+        gap: 20px;
+      }
+
+      .nav-menu.active {
+        right: 0;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="/" class="logo">
+        <img class="logo-img" src="images/PMG.svg" alt="PMG">
+        <span>پارس مکان قطعه</span>
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#home">صفحه اصلی</a></li>
+        <li><a href="#categories">دسته‌بندی‌ها</a></li>
+        <li><a href="#products">محصولات ما</a></li>
+        <li><a href="#about">درباره ما</a></li>
+        <li><a href="#contact">تماس با ما</a></li>
+      </ul>
+
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+        <img src="images/paner78.svg" alt="بنر" class="hero-img">
+
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories-section" id="categories">
+    <h2 class="section-title">دسته‌بندی محصولات</h2>
+    <div class="categories-container">
+      <div class="categories-scroll" id="categoriesScroll">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>در حال بارگذاری دسته‌بندی‌ها...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products-section" id="products">
+    <h2 class="section-title">محصولات ما</h2>
+    <div class="products-container">
+        
+      <div class="products-scroll" id="productsScroll">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>در حال بارگذاری محصولات...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-sec" id="about">
+    <h2 class="section-title">درباره ما</h2>
+    <div style="max-width: 800px; margin: 0 auto; text-align: center; color: #555; line-height: 2;">
+      <p style="font-size: 18px; margin-bottom: 20px;">
+        پارس مکان قطعه با بیش از 20 سال سابقه در زمینه واردات و توزیع قطعات یدکی خودرو، 
+        به عنوان یکی از معتبرترین تامین‌کنندگان این حوزه شناخته می‌شود.
+      </p>
+      <p style="font-size: 16px;">
+        ما متعهد به ارائه محصولات با کیفیت، قیمت مناسب و خدمات پس از فروش عالی هستیم.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>درباره پارس مکان قطعه</h3>
+        <p>تامین کننده معتبر قطعات یدکی خودرو با بیش از 20 سال سابقه درخشان</p>
+        <div class="social-links">
+          <a href="https://www.instagram.com/parsmakanghateh?igsh=OTk2eDQzNTdlNGt5"><i class="fab fa-instagram"></i></a>
+          <a href="https://t.me/ParsMakanGhateh"><i class="fab fa-telegram"></i></a>
+          <a href="https://wa.me/message/4ZY3SFZGWWUBJ1"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h3>دسترسی سریع</h3>
+        <a href="#home">صفحه اصلی</a>
+        <a href="#categories">دسته‌بندی‌ها</a>
+        <a href="#products">محصولات</a>
+        <a href="#about">درباره ما</a>
+      </div>
+
+      <div class="footer-section">
+        <h3>تماس با ما</h3>
+        <p><i class="fas fa-phone"></i>  09173271310</p>
+        <p><i class="fas fa-envelope"></i> parsmakanghateh@gmail.com</p>
+        <p><i class="fas fa-map-marker-alt"></i>   شیراز - میدان مطهری ساختمان الهیه</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>خبرنامه</h3>
+        <p>برای دریافت آخرین اخبار و تخفیفات ویژه عضو شوید</p>
+        <div style="margin-top: 15px;">
+          <input type="email" placeholder="ایمیل خود را وارد کنید" style="width: 100%; padding: 10px; border: none; border-radius: 5px; margin-bottom: 10px;">
+          <button style="width: 100%; padding: 10px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">عضویت</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 پارس مکان قطعه. تمامی حقوق محفوظ است.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          navMenu.classList.remove('active');
+        }
+      });
+    });
+
+    // Fetch Categories
+    async function fetchCategories() {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+
+        if (data.success && data.data.categories.length > 0) {
+          const categoriesScroll = document.getElementById('categoriesScroll');
+          categoriesScroll.innerHTML = data.data.categories.map(category => `
+            <div class="category-card"">
+              <img src="${category.image}" alt="${category.name}" class="category-image">
+              <div class="category-name">${category.name}</div>
+            </div>
+          `).join('');
+        } else {
+          document.getElementById('categoriesScroll').innerHTML = '<p style="text-align: center; color: #95a5a6;">دسته‌بندی‌ای یافت نشد</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        document.getElementById('categoriesScroll').innerHTML = '<p style="text-align: center; color: #e74c3c;">خطا در بارگذاری دسته‌بندی‌ها</p>';
+      }
+    }
+
+    // Fetch Products
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products?limit=12');
+
+        const data = await response.json();
+
+        if (data.success && data.data.products.length > 0) {
+          const productsScroll = document.getElementById('productsScroll');
+          productsScroll.innerHTML = data.data.products.map(product => {
+            const mainImage = product.images && product.images.length > 0
+              ? product.images.find(img => img.isMain)?.url || product.images[0].url || product.images[0]
+              : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="280" height="200"%3E%3Crect fill="%23f0f0f0" width="280" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+
+            return `
+<div class="product-card">
+  <img src="${mainImage}" alt="${product.name}" class="product-image">
+  <div class="product-info">
+    <div class="product-name">${product.name}</div>
+    <div class="product-details"><i class="fas fa-tag"></i> ${product.brand}</div>
+    <!-- دکمه استعلام -->
+    <div class="btn-conter">
+        <a href="tel:09173271310" class="btn">
+            استعلام  قیمت
+        </a>
+    </div>
+
+  </div>
+</div>
+
+            `;
+          }).join('');
+        } else {
+          document.getElementById('productsScroll').innerHTML = '<p style="text-align: center; color: #95a5a6;">محصولی یافت نشد</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        document.getElementById('productsScroll').innerHTML = '<p style="text-align: center; color: #e74c3c;">خطا در بارگذاری محصولات</p>';
+      }
+    }
+
+    // Initialize
+    fetchCategories();
+    fetchProducts();
+  </script>
+<a href="tel:09173271310" class="call-button">
+  <i class="fas fa-phone"></i>
+</a>
+</body>
+
+</html>
+

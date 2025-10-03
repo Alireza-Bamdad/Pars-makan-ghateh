@@ -9,11 +9,7 @@ const path = require('path');
 
 const router = express.Router();
 
-// ----------------------
-// Admin Routes (MUST come FIRST before /:slug)
-// ----------------------
 
-// Get all products for admin
 router.get('/admin', [
   auth, isAdmin,
   query('page').optional().isInt({ min: 1 }),
@@ -91,19 +87,26 @@ router.get('/admin', [
     res.status(500).json({ success: false, message: 'خطای سرور' });
   }
 });
-
 // Create product
 router.post('/admin', [
   auth, isAdmin,
   (req, res, next) => { 
     uploadMultiple(req, res, (err) => { 
-      if (err) return handleUploadError(err, req, res, next); 
+      if (err) return handleUploadError(err, req, res, next);
+      
+      // بررسی اجباری بودن تصویر - اینجا درسته
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'حداقل یک تصویر برای محصول الزامی است'
+        });
+      }
+      
+      // console.log ها رو حذف کن یا به بعد از چک فایل منتقل کن
+      console.log('Files received:', req.files.length);
+      
       next(); 
     }); 
-    // Add this after the uploadMultiple middleware and before validation
-    console.log('Request body:', req.body);
-    console.log('Request files:', req.files);
-    console.log('Files received:', req.files?.length || 0);
   },
   
   body('name').trim().notEmpty().withMessage('نام محصول الزامی است'),
@@ -115,7 +118,8 @@ router.post('/admin', [
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log('Validation errors:', errors.array());
+    // حذف فایل‌های آپلود شده
+    if (req.files) req.files.forEach(file => deleteFile(file.path));
     return res.status(400).json({ 
       success: false, 
       message: 'خطای اعتبارسنجی', 
@@ -137,11 +141,9 @@ router.post('/admin', [
       isActive = true
     } = req.body;
     
-    console.log('Received data:', req.body);
-    console.log('Received files:', req.files?.length || 0);
-    
     const categoryExists = await Category.findById(category);
     if (!categoryExists) {
+      if (req.files) req.files.forEach(file => deleteFile(file.path));
       return res.status(400).json({ success: false, message: 'دسته‌بندی یافت نشد' });
     }
 
@@ -182,7 +184,6 @@ router.post('/admin', [
     res.status(500).json({ success: false, message: 'خطای سرور' });
   }
 });
-
 // Update product
 router.put('/admin/:id', [
   auth, isAdmin,
@@ -268,7 +269,6 @@ router.put('/admin/:id', [
     res.status(500).json({ success: false, message: 'خطای سرور' });
   }
 });
-
 // Delete product
 router.delete('/admin/:id', [
   auth, isAdmin,
@@ -304,12 +304,7 @@ router.delete('/admin/:id', [
   }
 });
 
-// در فایل routes/products.js اضافه کنید:
-
-
-
-// DELETE /api/products/:id/images/:imageIndex - Delete product image
-router.delete('/:id/images/:imageIndex', auth, async (req, res) => {
+router.delete('/:id/images/:imageIndex', [auth, isAdmin], async (req, res) => {
   try {
     const { id, imageIndex } = req.params;
     const index = parseInt(imageIndex);
@@ -361,11 +356,61 @@ router.delete('/:id/images/:imageIndex', auth, async (req, res) => {
     });
   }
 });
-// ----------------------
-// Public Routes (MUST come AFTER admin routes)
-// ----------------------
 
-// Get all products (pagination)
+router.put('/:id/images/:imageIndex/set-main', [auth, isAdmin], async (req, res) => {
+  try {
+    const { id, imageIndex } = req.params;
+    const index = parseInt(imageIndex);
+
+    console.log(`Setting image ${index} as main for product ${id}`);
+
+    // پیدا کردن محصول
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'محصول پیدا نشد' });
+    }
+
+    // بررسی اینکه index معتبر باشد
+    if (index < 0 || index >= product.images.length) {
+      return res.status(400).json({ success: false, message: 'شماره تصویر نامعتبر است' });
+    }
+
+    // تنظیم همه تصاویر به غیراصلی
+    product.images.forEach((image, i) => {
+      if (typeof image === 'object' && image !== null) {
+        image.isMain = (i === index);
+      }
+    });
+
+    // اگر تصاویر string هستند، تبدیل به object
+    if (product.images.length > 0 && typeof product.images[0] === 'string') {
+      product.images = product.images.map((imageUrl, i) => ({
+        url: imageUrl,
+        isMain: (i === index),
+        alt: product.name
+      }));
+    }
+
+    // ذخیره تغییرات در دیتابیس
+    await product.save();
+
+    console.log(`Image ${index} set as main for product ${id}`);
+
+    res.json({
+      success: true,
+      message: 'تصویر اصلی با موفقیت تنظیم شد',
+      data: product
+    });
+
+  } catch (error) {
+    console.error('Error setting main image:', error);
+    res.status(500).json({
+      success: false,
+      message: 'خطا در تنظیم تصویر اصلی'
+    });
+  }
+});
+
 router.get('/', [
   query('page').optional().isInt({ min: 1 }),
   query('limit').optional().isInt({ min: 1, max: 50 }),
@@ -445,59 +490,6 @@ router.get('/:slug', [
 
 // در فایل routes/products.js اضافه کنید:
 
-// PUT /api/products/:id/images/:imageIndex/set-main - Set main image
-router.put('/:id/images/:imageIndex/set-main', auth, async (req, res) => {
-  try {
-    const { id, imageIndex } = req.params;
-    const index = parseInt(imageIndex);
 
-    console.log(`Setting image ${index} as main for product ${id}`);
-
-    // پیدا کردن محصول
-    const product = await Product.findById(id);
-    if (!product) {
-      return res.status(404).json({ success: false, message: 'محصول پیدا نشد' });
-    }
-
-    // بررسی اینکه index معتبر باشد
-    if (index < 0 || index >= product.images.length) {
-      return res.status(400).json({ success: false, message: 'شماره تصویر نامعتبر است' });
-    }
-
-    // تنظیم همه تصاویر به غیراصلی
-    product.images.forEach((image, i) => {
-      if (typeof image === 'object' && image !== null) {
-        image.isMain = (i === index);
-      }
-    });
-
-    // اگر تصاویر string هستند، تبدیل به object
-    if (product.images.length > 0 && typeof product.images[0] === 'string') {
-      product.images = product.images.map((imageUrl, i) => ({
-        url: imageUrl,
-        isMain: (i === index),
-        alt: product.name
-      }));
-    }
-
-    // ذخیره تغییرات در دیتابیس
-    await product.save();
-
-    console.log(`Image ${index} set as main for product ${id}`);
-
-    res.json({
-      success: true,
-      message: 'تصویر اصلی با موفقیت تنظیم شد',
-      data: product
-    });
-
-  } catch (error) {
-    console.error('Error setting main image:', error);
-    res.status(500).json({
-      success: false,
-      message: 'خطا در تنظیم تصویر اصلی'
-    });
-  }
-});
 
 module.exports = router;

@@ -101,6 +101,12 @@ router.post('/admin', [
       if (err) {
         return handleUploadError(err, req, res, next);
       }
+            if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: 'تصویر دسته‌بندی الزامی است'
+        });
+      }
       next();
     });
   },

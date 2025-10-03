@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ارتباط با ما - پارس مکان قطعه</title>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    h2 {
+      color: black;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    /* بخش شماره‌های تماس */
+    .phone-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .phone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .phone-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .phone-card:hover {
+      background: #e6f0ff;
+      border-color: #0056b3;
+      transform: translateY(-3px);
+    }
+
+    .phone-card .label {
+      font-weight: bold;
+      color: #0056b3;
+      margin-bottom: .3rem;
+    }
+
+    .phone-card .number {
+      color: #333;
+      font-weight: bold;
+    }
+
+    /* نقشه */
+    .map-box {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+    }
+
+    .map-box iframe {
+      width: 100%;
+      height: 350px;
+      border: 0;
+    }
+
+    .map-footer {
+      padding: .8rem;
+      text-align: center;
+      font-size: 0.9rem;
+      background: #f3f4f6;
+      color: #666;
+    }
+
+    /* اطلاعات تماس */
+    .info-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .info-card {
+      flex: 1 1 300px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .info-card h3 {
+      margin: 0;
+      color: #0056b3;
+      font-weight: bold;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: #444;
+      font-size: 0.95rem;
+    }
+
+    /* آیکون ساده (جایگزین lucide) */
+    .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ff6600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <h2>با ما در ارتباط باشید</h2>
+
+    <!-- شماره‌های تماس -->
+    <div class="phone-section">
+      <h3 style="margin-bottom:1rem; color:#333;">شماره‌های تماس</h3>
+      <div class="phone-grid">
+        <% phoneNumbers.forEach(function(phone) { %>
+          <div class="phone-card" onclick="window.location.href='tel:<%= phone.number %>'">
+            <div class="label"><%= phone.label %></div>
+            <div class="number"><%= phone.number %></div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- نقشه -->
+    <div class="map-box">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55488.78838536846!2d52.402789592742934!3d29.631312103400987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3fb213d0a2900553%3A0x6635bb7b082c438!2sElahieh%20Shopping%20Center!5e0!3m2!1sen!2s!4v1757923724868!5m2!1sen!2s"
+                width="100%"
+                height="100%"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="موقعیت دفتر پارس مکان قطعه"
+                className="absolute inset-0"
+              />
+
+      <div class="map-footer">جهت دسترسی بهتر، می‌توانید از نقشه بالا استفاده کنید</div>
+    </div>
+
+    <!-- اطلاعات تماس -->
+    <div class="info-section">
+      <div class="info-card">
+        <div class="icon">✉</div>
+        <div>
+          <h3>ایمیل</h3>
+          <p>parsmakanghateh@gmail.com</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="icon">📍</div>
+        <div>
+          <h3>آدرس</h3>
+          <p>شیراز - میدان مطهری - ساختمان الهیه</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="icon">⏰</div>
+        <div>
+          <h3>ساعات کاری</h3>
+          <p>شنبه تا پنجشنبه: ۸ تا ۱۷</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
